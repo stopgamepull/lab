@@ -1,0 +1,637 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Presidents Lab</title>
+    <link rel="shortcut icon" href="images/PRL.png" type="image/png">
+    <style>
+      html,
+      body {
+        position: relative;
+        background: #000;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        color: #fff;
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        font-weight: 400;
+        margin: 0;
+        padding: 0;
+      }
+
+      .bg {
+        background: rgba(20, 20, 20, 0.8);
+        border-radius: 5px;
+        border: 1px solid #333;
+        margin: 10px;
+        width: 98.5vw;
+        height: 96vh;
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .center-content {
+        text-align: center;
+        margin: 20px auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+      }
+
+      .center-content h1 {
+        color: #fff;
+        margin: 20px 0;
+        font-size: 24px;
+        letter-spacing: 1px;
+      }
+
+      .center-content p {
+        color: #ccc;
+        margin: 10px 0;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .tabs {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+      }
+
+      .tab-button {
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        font-weight: 500;
+        border: none;
+        background: transparent;
+        color: #999;
+        padding: 8px 15px;
+        margin: 0 5px;
+        font-size: 14px;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s ease;
+      }
+
+      .tab-button.active {
+        color: #fff;
+        border-bottom: 2px solid #fff;
+      }
+
+      .tabs-content {
+        display: flex;
+        justify-content: center;
+        height: calc(100% - 200px);
+        overflow: hidden;
+      }
+
+      .tab-content {
+        display: none;
+        width: 100%;
+        height: 100%;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .logo-container {
+        width: 120px;
+        height: 120px;
+        margin: 0 20px;
+      }
+
+      .logo-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: grayscale(100%) contrast(120%);
+      }
+
+      .social-buttons {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .social-buttons button {
+        background: #222;
+        color: #fff;
+        border: 1px solid #444;
+        padding: 8px 12px;
+        margin-bottom: 8px;
+        font-size: 12px;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .social-buttons button:hover {
+        background: #333;
+      }
+
+      /* President Section */
+      .presidents-section {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        margin-top: 30px;
+      }
+
+      .president-card {
+        width: 160px;
+        margin: 0 10px;
+        text-align: center;
+      }
+
+      .president-photo {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 10px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid #fff;
+      }
+
+      .president-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .president-name {
+        color: #fff;
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+
+      .president-title {
+        color: #999;
+        font-size: 12px;
+      }
+
+      /* Content sections */
+      .card {
+        background: #111;
+        padding: 15px;
+        border-radius: 3px;
+        margin-bottom: 15px;
+        border-left: 3px solid #fff;
+      }
+
+      .card h3 {
+        color: #fff;
+        font-size: 16px;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+
+      .card p {
+        color: #aaa;
+        font-size: 13px;
+        line-height: 1.4;
+        margin: 0;
+      }
+
+      .tab-2-content {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 20px;
+      }
+
+      .side-cards {
+        flex: 1;
+        min-width: 300px;
+        padding: 0 10px;
+      }
+
+      .large-image {
+        flex: 2;
+        min-width: 400px;
+        padding: 0 10px;
+      }
+
+      /* Documentation styles */
+      .documentation {
+        padding: 20px;
+        color: #ccc;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .documentation h1 {
+        color: #fff;
+        font-size: 24px;
+        border-bottom: 1px solid #333;
+        padding-bottom: 10px;
+      }
+
+      .documentation h2 {
+        color: #fff;
+        font-size: 20px;
+        margin-top: 30px;
+      }
+
+      .documentation h3 {
+        color: #fff;
+        font-size: 16px;
+      }
+
+      .documentation ul {
+        padding-left: 20px;
+      }
+
+      /* Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #111;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #444;
+        border-radius: 3px;
+      }
+      a {
+        text-decoration: none;
+        outline: none;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg">
+      <div class="center-content">
+        <div style="width: 500px; margin-left: 50px">
+          <h1>Presidents Lab</h1>
+          <p>Every U.S. president was cloned in our laboratory.</p>
+        </div>
+        <div class="logo-container">
+          <img src="images/labweb.png" alt="HBC Logo">
+        </div>
+        <div class="tabs top-buttons">
+          <button class="tab-button active" data-tab="tab-1">Overview</button>
+          <button class="tab-button" data-tab="tab-2">Sustainability</button>
+          <button class="tab-button" data-tab="tab-3">Documentation</button>
+          <button class="tab-button" data-tab="tab-4">Research</button>
+        </div>
+        <div class="social-buttons">
+          <button id="x"><a href="https://x.com/PresidentsLabor">X</a></button>
+          <button>$PRL</button>
+        </div>
+      </div>
+
+      <!-- Presidents Section -->
+      <div class="presidents-section">
+        <div class="president-card">
+          <div class="president-photo">
+            <!-- You can insert your photo here -->
+            <img src="images/1.png" alt="President 1">
+          </div>
+          <div class="president-name">TRUMP</div>
+          <div class="president-title">.01 recipient</div>
+        </div>
+        <div class="president-card">
+          <div class="president-photo">
+            <img src="images/2.png" alt="President 2">
+          </div>
+          <div class="president-name">BIDEN 2</div>
+          <div class="president-title">.02 recipient</div>
+        </div>
+        <div class="president-card">
+          <div class="president-photo">
+            <img src="images/3.png" alt="President 3">
+          </div>
+          <div class="president-name">OBAMA</div>
+          <div class="president-title">.03 recipient</div>
+        </div>
+        <div class="president-card">
+          <div class="president-photo">
+            <img src="images/4.png" alt="President 4">
+          </div>
+          <div class="president-name">BUSH</div>
+          <div class="president-title">.04 recipient</div>
+        </div>
+        <div class="president-card">
+          <div class="president-photo">
+            <img src="images/5.png" alt="President 5">
+          </div>
+          <div class="president-name">CLINTON</div>
+          <div class="president-title">.05 recipient</div>
+        </div>
+      </div>
+
+      <div class="tabs-content">
+        <!-- Tab 1 -->
+        <div id="tab-1" class="tab-content active">
+          <div class="tab-2-content">
+            <div class="side-cards">
+              <div class="card">
+                <h3>1. Genesis Protocol Activated</h3>
+                <p>
+                  Deep within $PRL's quantum matrix, the Genesis Protocol
+                  initiates. Fifty organism templates are randomly generated,
+                  each encoded with a unique genetic algorithm designed to
+                  adapt, evolve, and react to the unknown.
+                </p>
+              </div>
+              <div class="card">
+                <h3>2. Hyper-Nanite Assembly</h3>
+                <p>
+                  Microscopic nanite forges begin assembling each organism.
+                  Molecular synthesis units bond organic compounds and synthetic
+                  elements into complex life forms, creating hybrids of biology
+                  and machine intelligence.
+                </p>
+              </div>
+            </div>
+            <div class="large-image">
+              <div class="card" style="height: 300px">
+                <h3>✳️ Hyper Centre</h3>
+                <p>Total organisms: <span id="total-ants">530</span></p>
+                <div style="overflow-y: auto; height: 200px">
+                  <table style="width: 100%; border-collapse: collapse">
+                    <thead>
+                      <tr style="border-bottom: 1px solid #333">
+                        <th style="text-align: left; padding: 5px">ID</th>
+                        <th style="text-align: left; padding: 5px">Deployed</th>
+                      </tr>
+                    </thead>
+                    <tbody id="ant-list">
+                      <!-- Rows will be added via JavaScript -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="side-cards">
+              <div class="card">
+                <h3>3. Genetic Diversity Injection</h3>
+                <p>
+                  To maximize evolutionary potential, a genetic diversity
+                  algorithm introduces mutations and random traits. Some will
+                  thrive, some will falter—but all will contribute to the data
+                  pool.
+                </p>
+              </div>
+              <div class="card">
+                <h3>4. Behavioral Matrix Activation</h3>
+                <p>
+                  The Behavioral Matrix, a hybrid AI model, is embedded into
+                  each organism. This matrix governs curiosity, aggression,
+                  resource gathering, and cooperation—key survival strategies.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2 -->
+        <div id="tab-2" class="tab-content">
+          <div class="tab-2-content">
+            <div class="side-cards">
+              <div class="card">
+                <h3>Δ1.1: Dimensional Vector Calculations</h3>
+                <p>
+                  $BIOAC Multiverse Core computes (X,Y,Z,T) coordinates for
+                  biosphere targets across parallel dimensions. Accuracy:
+                  ±0.00001μQ (quantum units).
+                </p>
+              </div>
+              <div class="card">
+                <h3>Ξ2.3: Portal Convergence Sequence</h3>
+                <p>
+                  Three Nexus Portals form a triadic energy loop (Ξ-loop) with
+                  synchronization at 99.98%. Portal IDs: P#001, P#002, P#003.
+                </p>
+              </div>
+            </div>
+            <div class="large-image">
+              <div class="card" style="
+                  height: 300px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                ">
+                <canvas id="simulation" width="500" height="250" style="background: #000; border: 1px solid #333"></canvas>
+              </div>
+            </div>
+            <div class="side-cards">
+              <div class="card">
+                <h3>Φ4.2: Fracture Release Protocol</h3>
+                <p>
+                  Energy release threshold: Φ = 10³ J/μQ. Organisms are split
+                  across dimensions with a 3-point entanglement factor of
+                  E#145%.
+                </p>
+              </div>
+              <div class="card">
+                <h3>Γ5.8: Energy Infusion Wave</h3>
+                <p>
+                  Multiverse energy signatures absorbed: ±2.3EΔ W. Effects:
+                  bio-luminescent traits (+32%), enhanced sensory ranges (+15%),
+                  or randomized multiversal anomalies.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3 -->
+        <div id="tab-3" class="tab-content">
+          <div class="documentation">
+            <h1>Presidents Lab ($PRL) - Documentation</h1>
+
+            <div id="abstract" class="section">
+              <h2>Abstract</h2>
+              <p>
+                The Presidents Lab ($PRL) is an advanced scientific platform
+                dedicated to unraveling the complexities of adaptive evolution,
+                biosphere interactions, and multiverse phenomena. Merging
+                cutting-edge biotechnology with quantum science, $PRL functions
+                autonomously to design, deploy, and observe synthetic organisms
+                across diverse simulated and parallel environments, offering
+                groundbreaking insights into the dynamics of life and evolution.
+              </p>
+            </div>
+
+            <div id="purpose" class="section">
+              <h2>Purpose and Vision</h2>
+              <p>
+                At its core, $PRL aims to redefine the frontiers of biology and
+                technology. By simulating intricate ecosystems and lifeforms in
+                dynamic environments, $PRL aspires to:
+              </p>
+              <ul>
+                <li>
+                  <strong>Unlock Evolutionary Secrets:</strong> Decipher the
+                  mechanisms that enable life to adapt and thrive under extreme
+                  or novel conditions.
+                </li>
+                <li>
+                  <strong>Explore Multiverse Dynamics:</strong> Harness quantum
+                  principles to uncover alternate evolutionary trajectories
+                  across parallel dimensions.
+                </li>
+                <li>
+                  <strong>Advance AI Development:</strong> Derive advanced
+                  neural architectures inspired by the emergent behaviors of
+                  autonomous synthetic organisms.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4 -->
+        <div id="tab-4" class="tab-content">
+          <div style="padding: 20px">
+            <div style="
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
+              ">
+              <div class="card" style="width: 45%; margin-bottom: 20px">
+                <h3>Experiment 1: Enhanced Photosynthesis (Code: EP-01)</h3>
+                <p>
+                  <strong>Ability Assigned:</strong> Organisms are modified with
+                  chlorofusion nodes to allow energy generation from minimal
+                  light sources at 200% efficiency compared to baseline
+                  photosynthesis.
+                </p>
+                <p>
+                  <strong>Results:</strong> 83% of organisms reached energy
+                  equilibrium within 12 minutes. Reproductive efficiency
+                  increased by 64%.
+                </p>
+              </div>
+              <div class="card" style="width: 45%; margin-bottom: 20px">
+                <h3>Experiment 2: Sonic Detection (Code: SD-02)</h3>
+                <p>
+                  <strong>Ability Assigned:</strong> Ultrasonic receptor glands
+                  grant organisms the ability to detect movement and communicate
+                  through sound waves up to 50 kHz.
+                </p>
+                <p>
+                  <strong>Results:</strong> Evasion success: 78% (control group:
+                  45%). Grouping behavior improved 93%, forming protective
+                  patterns.
+                </p>
+              </div>
+              <div class="card" style="width: 45%; margin-bottom: 20px">
+                <h3>Experiment 3: Adaptive Camouflage (Code: AC-03)</h3>
+                <p>
+                  <strong>Ability Assigned:</strong> Organisms are equipped with
+                  bio-mimetic skin capable of adapting their appearance to match
+                  surroundings with 0.2s response time.
+                </p>
+                <p>
+                  <strong>Results:</strong> Survival rate: 96% (control group:
+                  48%). Energy costs remained minimal under 10-minute camouflage
+                  intervals.
+                </p>
+              </div>
+              <div class="card" style="width: 45%; margin-bottom: 20px">
+                <h3>Experiment 4: Bio-Electric Defense (Code: BD-04)</h3>
+                <p>
+                  <strong>Ability Assigned:</strong> Organisms receive
+                  electro-plasma glands capable of discharging defensive shocks
+                  up to 15 volts.
+                </p>
+                <p>
+                  <strong>Results:</strong> Defense success rate: 89% (disable
+                  or deter predator). Organisms exhibited fatigue after 4-6
+                  discharges.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Tab switching functionality
+      document.querySelectorAll(".tab-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          // Remove active class from all buttons and content
+          document
+            .querySelectorAll(".tab-button")
+            .forEach((btn) => btn.classList.remove("active"));
+          document
+            .querySelectorAll(".tab-content")
+            .forEach((content) => content.classList.remove("active"));
+
+          // Add active class to clicked button and corresponding content
+          button.classList.add("active");
+          const tabId = button.getAttribute("data-tab");
+          document.getElementById(tabId).classList.add("active");
+        });
+      });
+
+      // Generate random ant data
+      const antList = document.getElementById("ant-list");
+      for (let i = 1; i <= 20; i++) {
+        const row = document.createElement("tr");
+        row.style.borderBottom = "1px solid #333";
+
+        const idCell = document.createElement("td");
+        idCell.textContent = `PRL-${Math.floor(1000 + Math.random() * 9000)}`;
+        idCell.style.padding = "5px";
+
+        const deployedCell = document.createElement("td");
+        deployedCell.textContent = `${Math.floor(
+          1 + Math.random() * 60
+        )} minutes ago`;
+        deployedCell.style.padding = "5px";
+
+        row.appendChild(idCell);
+        row.appendChild(deployedCell);
+        antList.appendChild(row);
+      }
+
+      // Simple canvas animation for tab 2
+      const canvas = document.getElementById("simulation");
+      if (canvas) {
+        const ctx = canvas.getContext("2d");
+
+        function draw() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          // Draw grid
+          ctx.strokeStyle = "#333";
+          ctx.lineWidth = 0.5;
+          for (let x = 0; x < canvas.width; x += 20) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, canvas.height);
+            ctx.stroke();
+          }
+          for (let y = 0; y < canvas.height; y += 20) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
+          }
+
+          // Draw some random dots
+          ctx.fillStyle = "#fff";
+          for (let i = 0; i < 50; i++) {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const size = 1 + Math.random() * 3;
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          requestAnimationFrame(draw);
+        }
+
+        draw();
+      }
+    </script>
+  
+
+</body></html>
